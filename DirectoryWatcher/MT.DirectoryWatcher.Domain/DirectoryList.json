@@ -1,0 +1,9 @@
+{
+  "DirectoryPath": {
+    "Apps": [
+      {
+        "AppName" : "SampleApp",
+        "Location": "E:\\My Projects\\FileWatcher\\Dir1"
+      } ]
+  }
+}

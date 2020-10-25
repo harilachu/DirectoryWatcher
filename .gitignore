@@ -1,0 +1,14 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/DirectoryWatcher/.vs/DirectoryWatcher/v16
+/DirectoryWatcher/DirectoryWatcher/bin/Debug/netcoreapp3.1
+/DirectoryWatcher/DirectoryWatcher/obj
+/DirectoryWatcher/MT.DirectoryWatcher.Backend/bin/Debug/netcoreapp3.1
+/DirectoryWatcher/MT.DirectoryWatcher.Backend/obj
+/DirectoryWatcher/MT.DirectoryWatcher.Common/bin/Debug/netcoreapp3.1
+/DirectoryWatcher/MT.DirectoryWatcher.Common/obj
+/DirectoryWatcher/MT.DirectoryWatcher.Domain/bin/Debug/netcoreapp3.1
+/DirectoryWatcher/MT.DirectoryWatcher.Domain/obj
