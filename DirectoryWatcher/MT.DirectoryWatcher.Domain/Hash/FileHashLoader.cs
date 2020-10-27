@@ -8,6 +8,7 @@ using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using MT.DirectoryWatcher.Blockchain;
 using MT.DirectoryWatcher.Common;
 using MT.DirectoryWatcher.Common.Interface.Hash;
 
@@ -18,13 +19,16 @@ namespace MT.DirectoryWatcher.Domain.Hash
         private readonly ILogger<FileHashLoader> _logger;
         private readonly IHashGenerator _hashGenerator;
         private readonly IDataProvider _dataProvider;
+        private readonly IDirectoryBlockchainService _blockchainService;
         private Dictionary<string, HashSet<FileHashInfoDto>> FileHashDict { get; set; }
 
-        public FileHashLoader(IHashGenerator hashGenerator, IDataProvider dataProvider, ILogger<FileHashLoader> logger)
+        public FileHashLoader(IHashGenerator hashGenerator, IDataProvider dataProvider, IDirectoryBlockchainService directoryBlockchainService, ILogger<FileHashLoader> logger)
         {
             this._logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this._hashGenerator = hashGenerator ?? throw new ArgumentNullException(nameof(hashGenerator));
             this._dataProvider = dataProvider ?? throw new ArgumentNullException(nameof(dataProvider));
+            this._blockchainService = directoryBlockchainService ?? throw new ArgumentNullException(nameof(directoryBlockchainService));
+
             this.FileHashDict = new Dictionary<string, HashSet<FileHashInfoDto>>();
         }
 
@@ -177,12 +181,12 @@ namespace MT.DirectoryWatcher.Domain.Hash
             if (fileHashInfoDto == null) throw new ArgumentException(@"fileHashInfoDto is null", nameof(fileHashInfoDto));
             if (hashString == null) throw new ArgumentException(@"hashString is null", nameof(hashString));
 
-            if (!fileHashInfoDto.OldHash.Equals(hashString))
+            if (!fileHashInfoDto.OldHash.Equals(hashString) && !fileHashInfoDto.NewHash.Equals(hashString))
             {
                 fileHashInfoDto.NewHash = hashString;
                 fileHashInfoDto.FileChange = ChangeType.Modified;
                 this._dataProvider.UpdateFileInfo(app.AppName, fileHashInfoDto);
-                //ToDo: Add file tampered list in blockchain
+                Task.Run(()=>this._blockchainService.InsertTamperedFiles(fileHashInfoDto));
             }
         }
 
@@ -240,9 +244,9 @@ namespace MT.DirectoryWatcher.Domain.Hash
                                 { DirectoryPath = fileHashInfoDto.DirectoryPath, FileName = oldFileName };
                             var oldFileInfo = _dataProvider.GetFileInfo(app.AppName, oldFileInfoDto);
                             //Remove and add renamed file
-                            _dataProvider.RemoveFileInfos(app.AppName, oldFileInfo);
-                            _dataProvider.AddFileInfo(app.AppName, fileHashInfoDto);
-                            //ToDo: Add file tampered list in blockchain
+                            this._dataProvider.RemoveFileInfos(app.AppName, oldFileInfo);
+                            this._dataProvider.AddFileInfo(app.AppName, fileHashInfoDto);
+                            Task.Run(() => this._blockchainService.InsertTamperedFiles(fileHashInfoDto));
                         }
                     }
                 }
@@ -278,9 +282,9 @@ namespace MT.DirectoryWatcher.Domain.Hash
                             //Change new directory path after getting old fileinfo
                             fileHashInfoDto.DirectoryPath = newDirInfo.FullName;
                             //Remove and add renamed file
-                            _dataProvider.RemoveFileInfos(app.AppName, oldFileInfo);
-                            _dataProvider.AddFileInfo(app.AppName, fileHashInfoDto);
-                            //ToDo: Add file tampered list in blockchain
+                            this._dataProvider.RemoveFileInfos(app.AppName, oldFileInfo);
+                            this._dataProvider.AddFileInfo(app.AppName, fileHashInfoDto);
+                            Task.Run(() => this._blockchainService.InsertTamperedFiles(fileHashInfoDto));
                         }
                     }
                 }
@@ -298,7 +302,17 @@ namespace MT.DirectoryWatcher.Domain.Hash
             {
                 RenameDirectoryWithinFiles(fileInfo.Name, oldDirPath, newDirInfo, directoryPath);
             }
-            //ToDo: Add to Directory tampered list in blockchain
+
+            if (newDirInfo != null)
+            {
+                DirectoryInfoDto dirInfoDto = new DirectoryInfoDto()
+                {
+                    DirectoryChange = ChangeType.Renamed,
+                    DirectoryName = newDirInfo.Name,
+                    DirectoryPath = newDirInfo.FullName
+                };
+                Task.Run(() => this._blockchainService.InsertTamperedDirectory(dirInfoDto));
+            }
 
             var subDirectories = newDirInfo.GetDirectories();
             var subDirList = subDirectories.ToList();
@@ -351,9 +365,9 @@ namespace MT.DirectoryWatcher.Domain.Hash
                                 { DirectoryPath = fileHashInfoDto.DirectoryPath, FileName = fileHashInfoDto.FileName };
                             var oldFileInfo = _dataProvider.GetFileInfo(app.AppName, oldFileInfoDto);
                             //Remove and add renamed file
-                            _dataProvider.RemoveFileInfos(app.AppName, oldFileInfo);
-                            _dataProvider.AddFileInfo(app.AppName, fileHashInfoDto);
-                            //ToDo: Add file tampered list in blockchain
+                            this._dataProvider.RemoveFileInfos(app.AppName, oldFileInfo);
+                            this._dataProvider.AddFileInfo(app.AppName, fileHashInfoDto);
+                            Task.Run(() => this._blockchainService.InsertTamperedFiles(fileHashInfoDto)).Wait();
                         }
                     }
                 }
@@ -368,7 +382,17 @@ namespace MT.DirectoryWatcher.Domain.Hash
         {
             try
             {
-                //ToDo: Add to Directory tampered list in blockchain
+                if (directoryInfo != null)
+                {
+                    DirectoryInfoDto dirInfoDto = new DirectoryInfoDto()
+                    {
+                        DirectoryChange = ChangeType.Deleted,
+                        DirectoryName = directoryInfo.Name,
+                        DirectoryPath = directoryInfo.FullName
+                    };
+                    Task.Run(() => this._blockchainService.InsertTamperedDirectory(dirInfoDto)).Wait();
+                }
+
 
                 var app = GetApp(directoryPath);
                 if (app != null && directoryInfo != null)
@@ -388,9 +412,10 @@ namespace MT.DirectoryWatcher.Domain.Hash
                                 { DirectoryPath = fileHashInfoDto.DirectoryPath, FileName = fileHashInfoDto.FileName };
                             var oldFileInfo = _dataProvider.GetFileInfo(app.AppName, oldFileInfoDto);
                             //Remove and add renamed file
-                            _dataProvider.RemoveFileInfos(app.AppName, oldFileInfo);
-                            _dataProvider.AddFileInfo(app.AppName, fileHashInfoDto);
-                            //ToDo: Add file tampered list in blockchain
+                            this._dataProvider.RemoveFileInfos(app.AppName, oldFileInfo);
+                            this._dataProvider.AddFileInfo(app.AppName, fileHashInfoDto);
+                            Task.Run(() => this._blockchainService.InsertTamperedFiles(fileHashInfoDto)).Wait();
+
                         }
                     }
                 }

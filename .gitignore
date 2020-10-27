@@ -12,3 +12,6 @@
 /DirectoryWatcher/MT.DirectoryWatcher.Common/obj
 /DirectoryWatcher/MT.DirectoryWatcher.Domain/bin/Debug/netcoreapp3.1
 /DirectoryWatcher/MT.DirectoryWatcher.Domain/obj
+/DirectoryWatcher/.vs/DirectoryWatcher/DesignTimeBuild
+/DirectoryWatcher/MT.DirectoryWatcher.Blockchain/bin/Debug/netcoreapp3.1
+/DirectoryWatcher/MT.DirectoryWatcher.Blockchain/obj

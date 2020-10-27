@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MT.DirectoryWatcher.Backend;
+using MT.DirectoryWatcher.Blockchain;
 using MT.DirectoryWatcher.Common;
 using MT.DirectoryWatcher.Common.Interface.Hash;
 using MT.DirectoryWatcher.Domain;
@@ -38,6 +39,7 @@ namespace MT.DirectoryWatcher.Service
                         .AddSingleton<IHashLoader, FileHashLoader>()
                         .AddTransient<IDirectoryMonitor, DirectoryMonitor>()
                         .AddTransient<IHashGenerator, Sha256HashGenerator>()
+                        .AddTransient<IDirectoryBlockchainService, DirectoryBlockChainService>()
                         .AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
                     //Do not change this init order.

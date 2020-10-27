@@ -89,6 +89,11 @@ namespace MT.DirectoryWatcher.Domain
             this.IsMonitoring = true;
         }
 
+        public async Task CheckFilesAndComputeHash()
+        {
+            await _hashLoader.LoadInitialFileHashesToDB();
+        }
+
         public void CheckAndStopInvalidMonitors()
         {
             var directoryList = DirectoryConfigurator.GetDirectoryList();

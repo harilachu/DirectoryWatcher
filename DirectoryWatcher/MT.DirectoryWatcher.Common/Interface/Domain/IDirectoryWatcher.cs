@@ -11,5 +11,6 @@ namespace MT.DirectoryWatcher.Common
 
         Task InitFileHashesToDbAsync();
         void CheckAndStopInvalidMonitors();
+        Task CheckFilesAndComputeHash();
     }
 }

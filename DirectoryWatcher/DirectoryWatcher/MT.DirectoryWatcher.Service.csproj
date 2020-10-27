@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MT.DirectoryWatcher.Backend\MT.DirectoryWatcher.Backend.csproj" />
+    <ProjectReference Include="..\MT.DirectoryWatcher.Blockchain\MT.DirectoryWatcher.Blockchain.csproj" />
     <ProjectReference Include="..\MT.DirectoryWatcher.Common\MT.DirectoryWatcher.Common.csproj" />
     <ProjectReference Include="..\MT.DirectoryWatcher.Domain\MT.DirectoryWatcher.Domain.csproj" />
   </ItemGroup>

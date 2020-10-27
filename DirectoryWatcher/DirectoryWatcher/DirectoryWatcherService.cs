@@ -37,6 +37,7 @@ namespace MT.DirectoryWatcher.Service
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
                 _directoryWatcher.CheckAndStopInvalidMonitors();
+                await _directoryWatcher.CheckFilesAndComputeHash();
                 await Task.Delay(5000, stoppingToken);
             }
         }
