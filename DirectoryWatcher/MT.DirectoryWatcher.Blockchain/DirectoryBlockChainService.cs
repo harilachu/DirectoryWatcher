@@ -18,7 +18,7 @@ namespace MT.DirectoryWatcher.Blockchain
     {
         private const string ConstBlockchainUrl = "http://127.0.0.1:8504";
         private const string ConstPrivateKey= "0x3cc5bfac7471a4726dfee070bad124fb6e7e06c6f05957d9f3fbbcb840065d00";
-        private const string ConstContractAddress = "0x37e35caEf786CE4c96A99C75DA25AF2940dCf23C";
+        private const string ConstContractAddress = "0x3F6a9f72B5Fb9ed739e09575731Db05BBE20f1C7";//"0x37e35caEf786CE4c96A99C75DA25AF2940dCf23C";
 
         private string m_contractAddress;
         private readonly ILogger<DirectoryBlockChainService> _logger;

@@ -15,3 +15,6 @@
 /DirectoryWatcher/.vs/DirectoryWatcher/DesignTimeBuild
 /DirectoryWatcher/MT.DirectoryWatcher.Blockchain/bin/Debug/netcoreapp3.1
 /DirectoryWatcher/MT.DirectoryWatcher.Blockchain/obj
+/DirectoryWatcher/MT.DirectoryWatcher.UI/.vs/MT.DirectoryWatcher.UI
+/DirectoryWatcher/MT.DirectoryWatcher.UI/MT.DirectoryWatcher.UI/bin/Debug/net5.0-windows
+/DirectoryWatcher/MT.DirectoryWatcher.UI/MT.DirectoryWatcher.UI/obj
