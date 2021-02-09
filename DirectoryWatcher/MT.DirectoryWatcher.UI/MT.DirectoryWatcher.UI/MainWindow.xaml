@@ -17,14 +17,9 @@
         <vm:MainWindowVM></vm:MainWindowVM>
     </Window.DataContext>-->
     <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="15*"/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="80"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
-            <RowDefinition Height="80"></RowDefinition>
+            <RowDefinition Height="5"></RowDefinition>
             <RowDefinition Height="*"></RowDefinition>
         </Grid.RowDefinitions>
         <Grid.Resources>
@@ -37,33 +32,48 @@
             </Style>
     </Grid.Resources>
         <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"></ColumnDefinition>
-                <ColumnDefinition Width="100"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <dxe:TextEdit VerticalAlignment="Center" HorizontalAlignment="Left" Text="Directory watcher" FontSize="22"
-                          EditMode="InplaceInactive" Margin="20,0,0,0"/>
-            <Button Content="Refresh" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center"  FontSize="20"
-                    Command="{Binding RefreshCommand}"></Button>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="80"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="100"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <dxe:TextEdit VerticalAlignment="Center" HorizontalAlignment="Left" Text="Directory watcher" FontSize="22"
+                              EditMode="InplaceInactive" Margin="20,0,0,0"/>
+                <Button Content="Refresh" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center"  FontSize="20"
+                        Command="{Binding RefreshCommand}"></Button>
+                <Image Grid.Column="2" Source="/MT.DirectoryWatcher.UI;component/Images/IconImage.png" HorizontalAlignment="Right"></Image>
+            </Grid>
+            <dxg:GridControl Grid.Row="1" AutoGenerateColumns="AddNew" 
+                             EnableSmartColumnsGeneration="True"
+                             ItemsSource="{Binding TamperedDirectories, IsAsync=True}" Grid.ColumnSpan="2">
+                <dxg:GridControl.View>
+                    <dxg:TableView AllowPerPixelScrolling="True" ShowTotalSummary="False" AllowEditing="False"/>
+                </dxg:GridControl.View>
+            </dxg:GridControl>
         </Grid>
-        
-        <dxg:GridControl Grid.Row="1" AutoGenerateColumns="AddNew" 
-                         EnableSmartColumnsGeneration="True"
-                         ItemsSource="{Binding TamperedDirectories, IsAsync=True}" Grid.ColumnSpan="2">
-            <dxg:GridControl.View>
-                <dxg:TableView AllowPerPixelScrolling="True" ShowTotalSummary="False" AllowEditing="False"/>
-            </dxg:GridControl.View>
-        </dxg:GridControl>
+       
+        <GridSplitter Grid.Row="1" Height="5" HorizontalAlignment="Stretch"></GridSplitter>
 
-        <dxe:TextEdit Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Text="Files watcher" FontSize="22"
+        <Grid Grid.Row="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="80"></RowDefinition>
+                <RowDefinition Height="*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <dxe:TextEdit Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Text="Files watcher" FontSize="22"
                       EditMode="InplaceInactive" Margin="20,0,0,0"/>
 
-        <dxg:GridControl Grid.Row="3" AutoGenerateColumns="AddNew" 
-                         EnableSmartColumnsGeneration="True" 
-                         ItemsSource="{Binding TamperedFiles, IsAsync=True}" Grid.ColumnSpan="2" Grid.RowSpan="2" >
-            <dxg:GridControl.View>
-                <dxg:TableView AllowPerPixelScrolling="True" ShowTotalSummary="False" AllowEditing="False"  RowStyle="{StaticResource customRowStyle}"/>
-            </dxg:GridControl.View>
-        </dxg:GridControl>
+            <dxg:GridControl Grid.Row="1" AutoGenerateColumns="AddNew" 
+                             EnableSmartColumnsGeneration="True" 
+                             ItemsSource="{Binding TamperedFiles, IsAsync=True}" Grid.ColumnSpan="2">
+                <dxg:GridControl.View>
+                    <dxg:TableView AllowPerPixelScrolling="True" ShowTotalSummary="False" AllowEditing="False"  RowStyle="{StaticResource customRowStyle}"/>
+                </dxg:GridControl.View>
+            </dxg:GridControl>
+        </Grid>
     </Grid>
 </dx:ThemedWindow>
